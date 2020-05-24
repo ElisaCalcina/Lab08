@@ -7,6 +7,11 @@ package it.polito.tdp.extflightdelays;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultWeightedEdge;
+
+import it.polito.tdp.extflightdelays.model.Airport;
+import it.polito.tdp.extflightdelays.model.Connessione;
 import it.polito.tdp.extflightdelays.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -35,8 +40,27 @@ public class FXMLController {
 
     @FXML
     void doAnalizzaAeroporti(ActionEvent event) {
-    	//TODO
-    }
+    	txtResult.clear();
+    	String distanza=distanzaMinima.getText();
+    	int distanzaI = 0;
+    	
+    	try {
+    		distanzaI= Integer.parseInt(distanza);
+    	}catch(NumberFormatException e) {
+    		txtResult.appendText("Devi inserire un numero");
+    	}
+    
+    	this.model.creaGrafo(distanzaI);
+    	txtResult.appendText(String.format("Grafo stampato con %d vertici e %d archi", this.model.nVertici(), this.model.nArchi())+"\n");
+    	txtResult.appendText("Gli archi con distanza maggiore di "+distanzaI+" sono: \n");
+    	
+    	
+    	for(Connessione c: this.model.getConn()) {
+    		if(c.getPeso()>distanzaI) {
+    			txtResult.appendText(this.model.getIdMap().get(c.getAer1()).getAirportName()+" - "+this.model.getIdMap().get(c.getAer2()).getAirportName()+ " - Peso:"+ c.getPeso()+"\n");
+    		}
+    	}
+   	}
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
