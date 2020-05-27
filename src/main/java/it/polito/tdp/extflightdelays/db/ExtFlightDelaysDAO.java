@@ -57,6 +57,7 @@ public class ExtFlightDelaysDAO {
 				result.add(airport);
 				idMap.put(airport.getId(), airport);
 				}
+				
 			}
 
 			conn.close();
